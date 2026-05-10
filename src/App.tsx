@@ -48,7 +48,10 @@ const firebaseConfig = {
 
 // 서비스 초기화
 const app = initializeApp(firebaseConfig);
-const analytics = typeof window !== "undefined" ? getAnalytics(app) : null;
+// 빌드 에러 방지: 변수에 할당하지 않고 초기화만 실행 (GA4 자동 추적)
+if (typeof window !== "undefined") {
+  getAnalytics(app);
+}
 const auth = getAuth(app);
 const db = getFirestore(app);
 const appId = 'geul-o-reum';
@@ -167,6 +170,7 @@ export default function App() {
     setIsSubmitting(true);
 
     try {
+      // 지정된 경로 규칙 준수
       const applyRef = collection(db, 'artifacts', appId, 'users', user.uid, 'applications');
       await addDoc(applyRef, {
         parentName,
@@ -280,11 +284,11 @@ export default function App() {
             </span>
           </Reveal>
           <Reveal delay={100}>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight text-[#1e293b] mb-8 leading-[1.1] text-center">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight text-[#1e293b] mb-8 leading-[1.1] text-center text-balance">
               우리아이 성적의 결정타,<br className="hidden sm:block" />
               <span className="relative inline-block">
                 <span className="relative z-10 text-[#b45309]">문해력</span>
-                <span className="absolute bottom-2 left-0 w-full h-4 bg-[#fef3c7] -z-10 text-center"></span>
+                <span className="absolute bottom-2 left-0 w-full h-4 bg-[#fef3c7] -z-10"></span>
               </span>에 답이 있습니다.
             </h1>
           </Reveal>
@@ -368,12 +372,12 @@ export default function App() {
                 <div className="inline-block py-2 px-4 rounded-lg bg-[#fffbeb] text-[#b45309] font-black text-sm mb-6 border border-[#fef3c7] text-left">
                   MENTOR INTRO
                 </div>
-                <h2 className="text-4xl md:text-5xl font-black text-[#1e293b] mb-8 leading-tight text-left">
+                <h2 className="text-4xl md:text-5xl font-black text-[#1e293b] mb-8 leading-tight text-left text-balance">
                   "아이들의 세상을<br/>책으로 넓혀주고 싶습니다"
                 </h2>
                 <div className="space-y-6 text-xl text-stone-600 font-medium leading-relaxed mb-10 text-left">
                   <p>안녕하세요, 독서 멘토 <strong className="text-[#b45309] font-black">Claire</strong>입니다.</p>
-                  <p className="text-balance text-left text-left">지식의 전달보다 중요한 것은 아이가 책을 '대하는 마음'입니다. 스스로 질문을 던지고 답을 찾는 즐거움을 깨닫는 순간, 성적은 자연스럽게 따라옵니다.</p>
+                  <p className="text-balance text-left">지식의 전달보다 중요한 것은 아이가 책을 '대하는 마음'입니다. 스스로 질문을 던지고 답을 찾는 즐거움을 깨닫는 순간, 성적은 자연스럽게 따라옵니다.</p>
                 </div>
                 
                 <ul className="space-y-5 p-0 list-none">
@@ -417,9 +421,9 @@ export default function App() {
             ].map((review, i) => (
               <Reveal key={i} delay={i * 100}>
                 <div className="bg-[#2d3748] p-10 rounded-[2rem] border border-white/10 hover:border-[#fef3c7]/30 transition-all group h-full flex flex-col justify-between text-left">
-                  <div className="text-left">
+                  <div className="text-left text-balance">
                     <div className="flex text-[#fef3c7] mb-6 text-left">{"★".repeat(5)}</div>
-                    <p className="text-white/80 leading-relaxed font-medium mb-8 text-lg italic text-left text-balance">"{review.text}"</p>
+                    <p className="text-white/80 leading-relaxed font-medium mb-8 text-lg italic text-left">"{review.text}"</p>
                   </div>
                   <div className="flex items-center gap-4 border-t border-white/5 pt-6 text-left">
                     <div className="w-10 h-10 bg-[#fef3c7] rounded-full flex items-center justify-center text-[#1e293b] font-black text-left">{review.writer[0]}</div>
@@ -469,7 +473,7 @@ export default function App() {
             </div>
             <div className="text-left">
               <h3 className="text-white font-black text-lg mb-8 tracking-widest uppercase text-left">Quick Links</h3>
-              <ul className="space-y-4 font-bold p-0 list-none text-left">
+              <ul className="space-y-4 font-bold p-0 list-none text-left text-balance">
                 <li className="text-left"><a href="#about" className="hover:text-white transition no-underline">커리큘럼</a></li>
                 <li className="text-left"><a href="#profile" className="hover:text-white transition no-underline">멘토 소개</a></li>
                 <li className="text-left"><a href="#reviews" className="hover:text-white transition no-underline">학부모 후기</a></li>
@@ -505,7 +509,7 @@ export default function App() {
                   <div className="flex items-center gap-4 opacity-80 text-left"><CircleDollarSign className="w-6 h-6 text-[#fef3c7]" /><span>수강료 전액 지원</span></div>
                 </div>
               </div>
-              <p className="text-xs text-[#64748b] font-bold leading-relaxed border-t border-white/5 pt-10 text-left">
+              <p className="text-xs text-[#64748b] font-bold leading-relaxed border-t border-white/5 pt-10 text-left text-balance">
                 입력하신 개인정보는 강연 안내 목적으로만 소중히 관리됩니다.
               </p>
             </div>
@@ -562,11 +566,11 @@ export default function App() {
 
       {/* Check Modal */}
       {isCheckModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-[#0f172a]/90 backdrop-blur-sm px-6 text-left">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-[#0f172a]/90 backdrop-blur-sm px-6">
           <div className="bg-white rounded-[2.5rem] w-full max-w-md p-10 relative border border-stone-200 shadow-2xl text-left">
             <button onClick={() => setIsCheckModalOpen(false)} className="absolute top-6 right-6 p-2 text-stone-400 hover:text-[#1e293b] transition-colors bg-transparent border-none cursor-pointer"><X className="h-7 w-7" /></button>
-            <h3 className="text-2xl font-black mb-8 text-[#1e293b] text-left">신청 내역 조회</h3>
-            <form onSubmit={handleCheck} className="space-y-6 text-left">
+            <h3 className="text-2xl font-black mb-8 text-[#1e293b] text-left text-balance">신청 내역 조회</h3>
+            <form onSubmit={handleCheck} className="space-y-6">
               <input type="tel" required value={checkPhone} onChange={(e) => setCheckPhone(e.target.value)} placeholder="010-0000-0000" className="w-full px-5 py-4 rounded-xl border border-stone-200 bg-stone-50 outline-none focus:border-[#b45309] font-bold text-left" />
               <button type="submit" disabled={isChecking} className="w-full py-4 rounded-xl font-black bg-[#1e293b] text-[#fef3c7] transition-all disabled:bg-stone-300 border-none cursor-pointer text-center">
                 {isChecking ? "조회 중..." : "내역 조회"}
